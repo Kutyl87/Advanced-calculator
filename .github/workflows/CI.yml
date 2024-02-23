@@ -31,5 +31,21 @@ jobs:
                 docker build -f dockerfiles/clang.Dockerfile -t pkutyl/clang_cpp:$TAG .
             - name: Run Container
               run: |
-                    docker run -d -it --name clang_cpp pkutyl/clang_cpp:$TAG
+                    docker run -d -it --name clang_cpp pkutyl/clang_cpp:$TAG     
+    build-gcc:
+        needs: check_format
+        runs-on: ubuntu-latest
+        env: 
+            TAG: ${{ (github.ref == 'refs/heads/main' && 'prod') || (github.ref == 'refs/heads/develop' && 'dev') || 'testing' }}
+        steps:
+            - name: Checkout_code
+              uses: actions/checkout@v2
+            - name: Build image
+              run: | 
+                echo "pkutyl/gcc_cpp:$TAG"
+                docker pull pkutyl/gcc_cpp:$TAG
+                docker build -f dockerfiles/gcc_app.Dockerfile -t pkutyl/gcc_cpp:$TAG .
+            - name: Run Container
+              run: |
+                    docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
                 
