@@ -54,9 +54,14 @@ jobs:
         needs: build-gcc-image
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout_code
-              uses: actions/checkout@v2
-        
+            - name: Pull image
+              run: |
+                docker pull ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
+            - name: Run Container
+              run: |
+                    docker run -d -it --name gcc_cpp ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
+            
+            
             # - name: Run Container
             #   run: |
             #         docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
