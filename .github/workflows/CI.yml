@@ -60,15 +60,13 @@ jobs:
             - name: Run Container
               run: |
                     docker run -d -it --name gcc_cpp ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
-            
-            
-            # - name: Run Container
-            #   run: |
-            #         docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
-    # test-clang:
-    #     needs: build-clang
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - name: Run Container
-    #           run: |
-    #                 docker exec clang_cpp /bin/bash -c "cd /app && make && ./app"
+    test-clang:
+        needs: build-clang-image
+        runs-on: ubuntu-latest
+        steps:
+            - name: Pull image
+              run: |
+                docker pull ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
+            - name: Run Container
+              run: |
+                    docker run -d -it --name clang_cpp ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
