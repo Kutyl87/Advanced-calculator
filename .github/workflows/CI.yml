@@ -46,7 +46,7 @@ jobs:
             - name: Build image
               run: | 
                 docker pull ${{ secrets.USERNAME }}/gcc_cpp:$TAG
-                docker build -f dockerfiles/gcc_app.Dockerfile -t ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}.
+                docker build -f dockerfiles/gcc_app.Dockerfile -t ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}} .
             - name: Push Image
               run: |
                   docker push ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
@@ -56,7 +56,7 @@ jobs:
         steps:
             - name: Checkout_code
               uses: actions/checkout@v2
-            
+        
             # - name: Run Container
             #   run: |
             #         docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
