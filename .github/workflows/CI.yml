@@ -28,7 +28,7 @@ jobs:
               run: | 
                 echo "pkutyl/clang_cpp:$TAG"
                 docker pull pkutyl/clang_cpp:$TAG
-                docker build -f docker/Dockerfile -t pkutyl/clang_cpp:$TAG .
+                docker build -f dockerfiles/clang.Dockerfile -t pkutyl/clang_cpp:$TAG .
             - name: Run Container
               run: |
                     docker run -d -it clang_cpp pkutyl:clang_cpp:$TAG
