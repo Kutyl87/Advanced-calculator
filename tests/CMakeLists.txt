@@ -20,6 +20,7 @@ set_target_properties(exec
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
 )
+target_compile_options(exec PRIVATE -Wall -Wextra -pedantic -Werror)
 target_include_directories(exec PUBLIC ../lib)
 target_link_directories(exec PUBLIC ../lib/lib)
 target_link_libraries(exec Characters_lib)
