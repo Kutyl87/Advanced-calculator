@@ -1,0 +1,34 @@
+name: c++ CI
+on:
+    push:
+        branches:
+        - "**"
+    pull_request:
+        branches:
+        - main
+        - develop
+jobs:
+    check_format:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Check format
+              run: |
+                find -name '*.cpp' -print0 | xargs -0 clang-format --Werror --dry-run
+    build-gcc:
+        needs: check_format
+        runs-on: ubuntu-latest
+        env: 
+            TAG: ${{ (github.ref == 'refs/heads/main' && 'prod') || (github.ref == 'refs/heads/develop' && 'dev') || 'testing' }}
+        steps:
+            - name: Checkout_code
+              uses: actions/checkout@v2
+            - name: Build image
+              run: | 
+                docker pull pkutyl/gcc_app:$TAG
+                docker build -f docker/Dockerfile -t pkutyl/gcc_app:$TAG .
+            - name: Run Container
+              run: |
+                    docker run -d -it gcc_app pkutyl:gcc_app:$TAG
+                
