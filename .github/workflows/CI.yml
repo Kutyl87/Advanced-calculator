@@ -16,7 +16,7 @@ jobs:
             - name: Check format
               run: |
                 find -name '*.cpp' -print0 | xargs -0 clang-format --Werror --dry-run
-    build-clang:
+    build-clang-image:
         needs: check_format
         runs-on: ubuntu-latest
         env: 
@@ -29,10 +29,15 @@ jobs:
                 echo "pkutyl/clang_cpp:$TAG"
                 docker pull pkutyl/clang_cpp:$TAG
                 docker build -f dockerfiles/clang.Dockerfile -t pkutyl/clang_cpp:$TAG .
-            - name: Run Container
-              run: |
-                    docker run -d -it --name clang_cpp pkutyl/clang_cpp:$TAG     
-    build-gcc:
+            # - name: Run Container
+            #   run: |
+            #         docker run -d -it --name clang_cpp pkutyl/clang_cpp:$TAG
+            # - name: Upload Build Artifacts
+            #   uses: actions/upload-artifact@v2
+            #   with:
+            #     name: clang_cpp
+            #     path: /app
+    build-gcc-image:
         needs: check_format
         runs-on: ubuntu-latest
         env: 
@@ -45,7 +50,13 @@ jobs:
                 echo "pkutyl/gcc_cpp:$TAG"
                 docker pull pkutyl/gcc_cpp:$TAG
                 docker build -f dockerfiles/gcc_app.Dockerfile -t pkutyl/gcc_cpp:$TAG .
-            - name: Run Container
-              run: |
-                    docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
-                
+            # - name: Run Container
+            #   run: |
+            #         docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
+    # test-clang:
+    #     needs: build-clang
+    #     runs-on: ubuntu-latest
+    #     steps:
+    #         - name: Run Container
+    #           run: |
+    #                 docker exec clang_cpp /bin/bash -c "cd /app && make && ./app"
