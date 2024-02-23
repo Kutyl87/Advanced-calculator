@@ -26,9 +26,8 @@ jobs:
               uses: actions/checkout@v2
             - name: Build image
               run: | 
-                echo "pkutyl/clang_cpp:$TAG"
-                docker pull pkutyl/clang_cpp:$TAG
-                docker build -f dockerfiles/clang.Dockerfile -t pkutyl/clang_cpp:$TAG .
+                docker pull ${{ secrets.USERNAME }}/clang_cpp:$TAG
+                docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:$TAG .
             # - name: Run Container
             #   run: |
             #         docker run -d -it --name clang_cpp pkutyl/clang_cpp:$TAG
@@ -47,9 +46,8 @@ jobs:
               uses: actions/checkout@v2
             - name: Build image
               run: | 
-                echo "pkutyl/gcc_cpp:$TAG"
-                docker pull pkutyl/gcc_cpp:$TAG
-                docker build -f dockerfiles/gcc_app.Dockerfile -t pkutyl/gcc_cpp:$TAG .
+                docker pull ${{ secrets.USERNAME }}/gcc_cpp:$TAG
+                docker build -f dockerfiles/gcc_app.Dockerfile -t ${{ secrets.USERNAME }}/gcc_cpp:$TAG .
             # - name: Run Container
             #   run: |
             #         docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
