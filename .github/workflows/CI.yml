@@ -26,10 +26,10 @@ jobs:
               uses: actions/checkout@v2
             - name: Build image
               run: | 
+                echo "pkutyl/gcc_app:$TAG"
                 docker pull pkutyl/gcc_app:$TAG
                 docker build -f docker/Dockerfile -t pkutyl/gcc_app:$TAG .
             - name: Run Container
               run: |
-                    echo "pkutyl/gcc_app:$TAG"
                     docker run -d -it gcc_app pkutyl:gcc_app:$TAG
                 
