@@ -54,12 +54,23 @@ jobs:
         needs: build-gcc-image
         runs-on: ubuntu-latest
         steps:
+            - name: Install jq
+              run: sudo apt-get install jq
             - name: Pull image
               run: |
                 docker pull ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
             - name: Run Container
               run: |
                     docker run -d -it --name gcc_cpp ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
+            - name : Login to docker
+              run:  docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
+            - name: Cleanup
+              if: always()
+              run: |
+                   TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${{ secrets.USERNAME}}'", "password": "'${{ secrets.PASSWORD}}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+                   echo $TOKEN
+                   echo https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/my-docker-image/tags/${{ github.run_id }}
+                   curl -i -X DELETE -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/gcc_cpp/tags/${{ github.run_id }} |(! grep "err")
     test-clang:
         needs: build-clang-image
         runs-on: ubuntu-latest
@@ -70,3 +81,9 @@ jobs:
             - name: Run Container
               run: |
                     docker run -d -it --name clang_cpp ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
+            - name: Cleanup
+              if: always()
+              run: |
+                   TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${{ secrets.USERNAME}}'", "password": "'${{ secrets.PASSWORD}}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+                   echo $TOKEN
+                   curl -i -X DELETE -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/clang_cpp/tags/${{ github.run_id }} |(! grep "err")
