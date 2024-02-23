@@ -24,10 +24,15 @@ jobs:
         steps:
             - name: Checkout_code
               uses: actions/checkout@v2
+            - name: Login to docker
+              run:  docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
             - name: Build image
               run: | 
                 docker pull ${{ secrets.USERNAME }}/clang_cpp:$TAG
-                docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:$TAG .
+                docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}} .
+            - name: Push Image
+              run: |
+                docker push ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
             # - name: Run Container
             #   run: |
             #         docker run -d -it --name clang_cpp pkutyl/clang_cpp:$TAG
@@ -44,10 +49,15 @@ jobs:
         steps:
             - name: Checkout_code
               uses: actions/checkout@v2
+            - name : Login to docker
+              run:  docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
             - name: Build image
               run: | 
                 docker pull ${{ secrets.USERNAME }}/gcc_cpp:$TAG
                 docker build -f dockerfiles/gcc_app.Dockerfile -t ${{ secrets.USERNAME }}/gcc_cpp:$TAG .
+            - name: Push Image
+              run: |
+                  docker push ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
             # - name: Run Container
             #   run: |
             #         docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
