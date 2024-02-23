@@ -33,14 +33,6 @@ jobs:
             - name: Push Image
               run: |
                 docker push ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
-            # - name: Run Container
-            #   run: |
-            #         docker run -d -it --name clang_cpp pkutyl/clang_cpp:$TAG
-            # - name: Upload Build Artifacts
-            #   uses: actions/upload-artifact@v2
-            #   with:
-            #     name: clang_cpp
-            #     path: /app
     build-gcc-image:
         needs: check_format
         runs-on: ubuntu-latest
@@ -54,10 +46,17 @@ jobs:
             - name: Build image
               run: | 
                 docker pull ${{ secrets.USERNAME }}/gcc_cpp:$TAG
-                docker build -f dockerfiles/gcc_app.Dockerfile -t ${{ secrets.USERNAME }}/gcc_cpp:$TAG .
+                docker build -f dockerfiles/gcc_app.Dockerfile -t ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}.
             - name: Push Image
               run: |
                   docker push ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
+    test-gcc:
+        needs: build-gcc-image
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout_code
+              uses: actions/checkout@v2
+            
             # - name: Run Container
             #   run: |
             #         docker run -d -it --name gcc_cpp pkutyl/gcc_cpp:$TAG
