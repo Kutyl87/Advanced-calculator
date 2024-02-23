@@ -31,5 +31,5 @@ jobs:
                 docker build -f dockerfiles/clang.Dockerfile -t pkutyl/clang_cpp:$TAG .
             - name: Run Container
               run: |
-                    docker run -d -it clang_cpp pkutyl:clang_cpp:$TAG
+                    docker run -d -it --name clang_cpp pkutyl:clang_cpp:$TAG
                 
