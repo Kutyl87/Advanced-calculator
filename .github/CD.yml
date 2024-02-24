@@ -1,0 +1,45 @@
+name: C++ CD
+on:
+  workflow_run:
+    workflows: [C++ CI Linux]
+    types:
+      - completed
+jobs:
+  build_clang:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' &&  github.ref == 'refs/heads/develop')}}
+    env:
+      TAG: ${{ (github.ref == 'refs/heads/main' && 'prod') || (github.ref == 'refs/heads/develop' && 'dev') || 'testing' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Pull && Build Docker Image
+        run: |
+          docker pull ${{ secrets.USERNAME }}/clang_cpp:$TAG
+          docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}} .
+      - name: Save Docker Image
+        run: |
+          docker save ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}  -o clang_cpp.tar
+      - name: Upload Docker Image
+        uses: actions/upload-artifact@v2
+        with:
+          name: clang_cpp
+          path: clang_cpp.tar
+  publish_clang:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to DockerHub
+        run: docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: clang_cpp
+          path: /tmp
+      - name: Load Docker Image
+        run: |
+          docker load -i /tmp/clang_cpp.tar
+          docker tag ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}} ${{ secrets.USERNAME }}/clang_cpp:$TAG
+      - name: Push Docker Image
+        run: |
+          docker push ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
