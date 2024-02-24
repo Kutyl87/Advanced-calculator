@@ -4,8 +4,7 @@ on:
     workflows: [C++ CI Linux]
     types:
       - in_progress
-    branches: 
-      - CD_branch
+    branches: [CD_branch]
 jobs:
   build_clang:
     runs-on: ubuntu-latest
