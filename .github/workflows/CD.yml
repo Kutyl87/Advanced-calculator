@@ -4,7 +4,7 @@ on:
     workflows: [cpp-ci-linux]
     types:
       - completed
-    branches: [develop, main, CD_branch]
+    branches: [develop, main]
 jobs:
   build_clang:
     runs-on: ubuntu-latest
