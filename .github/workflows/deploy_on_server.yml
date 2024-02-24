@@ -1,4 +1,4 @@
-name: C++ CD
+name: C++ CD Server deployment
 on:
   workflow_dispatch:
     inputs:
