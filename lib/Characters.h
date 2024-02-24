@@ -1,6 +1,7 @@
 #include <vector>
 
-namespace swo::chars {
+namespace swo {
+namespace chars {
 
 class Characters {
  public:
@@ -14,3 +15,4 @@ class Characters {
 };
 
 }  // namespace swo::chars
+}
