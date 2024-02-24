@@ -44,4 +44,4 @@ jobs:
         run: |
           docker push ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
 
-# &&  g ithub.ref == 'refs/heads/develop'
+# &&  github.ref == 'refs/heads/develop'
