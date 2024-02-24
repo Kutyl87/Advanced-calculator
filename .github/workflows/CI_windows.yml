@@ -20,8 +20,6 @@ jobs:
                     dir
                     cd tests
                     dir
-                    cd exec.dir
-                    dir
                     cd Debug
                     dir
-                    ./tests.exe
+                    ./exec.exe
