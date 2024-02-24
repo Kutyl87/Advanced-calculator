@@ -7,7 +7,7 @@ on:
 jobs:
   build_clang:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' )}}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       TAG: ${{ (github.ref == 'refs/heads/main' && 'prod') || (github.ref == 'refs/heads/develop' && 'dev') || 'testing' }}
     steps:
@@ -26,7 +26,7 @@ jobs:
           name: clang_cpp
           path: clang_cpp.tar
   publish_clang:
-    needs: build
+    needs: build_clang
     runs-on: ubuntu-latest
     steps:
       - name: Login to DockerHub
