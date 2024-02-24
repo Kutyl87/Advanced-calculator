@@ -9,11 +9,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-            - name: Set up MSVC 2022
-              uses: microsoft/vssetup-action@v1
-              with:
-                  vswhere-version: 2.x
-                  vs-version: 17.0
+            - name: Set up MSVC
+              uses: ilammy/msvc-dev-cmd@v1
             - name: Build
               run: |
                     mkdir build
