@@ -20,4 +20,4 @@ jobs:
                     dir
                     cd tests
                     dir
-                    ./exec.exe
+                    cd exec.dir
