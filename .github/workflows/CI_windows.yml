@@ -17,3 +17,5 @@ jobs:
                     cd build
                     cmake ..
                     cmake --build .
+                    cd test
+                    exec.exe
