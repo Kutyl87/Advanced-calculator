@@ -83,10 +83,10 @@ jobs:
                 docker pull ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
             - name: Run Container
               run: |
-                    docker run -d -it --name clang_cpp ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
+                    docker run -d --name clang_cpp ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
             - name: Run Test
               run: |
-                docker container exec -it clang_cpp  sh -c "cd tests && ./exec"
+                docker container exec clang_cpp  sh -c "cd tests && ./exec"
             - name: Cleanup
               if: always()
               run: |
