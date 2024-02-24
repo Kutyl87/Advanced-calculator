@@ -40,8 +40,8 @@ jobs:
           path: /tmp
       - name: Load Docker Image
         run: |
+          echo $TAG
           docker load -i /tmp/clang_cpp.tar
-          docker tag ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}} ${{ secrets.USERNAME }}/clang_cpp:$TAG
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
