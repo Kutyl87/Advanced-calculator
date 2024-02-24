@@ -3,11 +3,11 @@ on:
   workflow_run:
     workflows: [C++ CI Linux]
     types:
-      - completed
+      - in_progress
+    branches: [CD_branch]
 jobs:
   build_clang:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' &&  github.ref == 'refs/heads/develop')}}
     env:
       TAG: ${{ (github.ref == 'refs/heads/main' && 'prod') || (github.ref == 'refs/heads/develop' && 'dev') || 'testing' }}
     steps:
@@ -16,17 +16,17 @@ jobs:
       - name: Pull && Build Docker Image
         run: |
           docker pull ${{ secrets.USERNAME }}/clang_cpp:$TAG
-          docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}} .
+          docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:$TAG .
       - name: Save Docker Image
         run: |
-          docker save ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}  -o clang_cpp.tar
+          docker save ${{ secrets.USERNAME }}/clang_cpp:$TAG  -o clang_cpp.tar
       - name: Upload Docker Image
         uses: actions/upload-artifact@v2
         with:
           name: clang_cpp
           path: clang_cpp.tar
   publish_clang:
-    needs: build
+    needs: build_clang
     runs-on: ubuntu-latest
     steps:
       - name: Login to DockerHub
@@ -43,3 +43,5 @@ jobs:
       - name: Push Docker Image
         run: |
           docker push ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
+
+# &&  github.ref == 'refs/heads/develop'

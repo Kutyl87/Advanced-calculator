@@ -1,4 +1,4 @@
-name: c++ CI
+name: C++ CI Linux
 on:
     push:
         branches:
