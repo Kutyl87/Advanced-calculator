@@ -11,9 +11,7 @@ set_target_properties(CharacterApp
         CXX_STANDARD_REQUIRED ON
 )
 include_directories(../lib)
-if(MSVC)
-#   target_compile_options(CharacterApp PRIVATE -Wall /W4 -pedantic -Werror)
-else()
+if(!MSVC)
   target_compile_options(CharacterApp PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
 target_link_directories(CharacterApp PUBLIC ../lib/lib)
