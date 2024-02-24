@@ -4,10 +4,12 @@ on:
     workflows: [C++ CI Linux]
     types:
       - completed
+    branches: 
+      - "**"
 jobs:
   build_clang:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
     env:
       TAG: ${{ (github.ref == 'refs/heads/main' && 'prod') || (github.ref == 'refs/heads/develop' && 'dev') || 'testing' }}
     steps:
