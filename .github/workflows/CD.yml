@@ -1,5 +1,8 @@
 name: C++ CD
 on:
+    push:
+      branches:
+        - '*'
   workflow_run:
     workflows: [cpp-ci-linux]
     types:
@@ -44,6 +47,6 @@ jobs:
           docker load -i /tmp/clang_cpp.tar
       - name: Push Docker Image
         run: |
-          docker push ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
+          docker push ${{ secrets.USERNAME }}/clang_cpp:$TAG
 
 # &&    github.ref == 'refs/heads/develop'
