@@ -17,9 +17,5 @@ jobs:
                     cd build
                     cmake ..
                     cmake --build .
-                    dir
-                    cd tests
-                    dir
-                    cd Debug
-                    dir
+                    cd tests/Debug
                     ./exec.exe
