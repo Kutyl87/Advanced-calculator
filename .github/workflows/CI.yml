@@ -61,10 +61,10 @@ jobs:
                 docker pull ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
             - name: Run Container
               run: |
-                    docker run -d -it --name gcc_cpp ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
+                    docker run -d --name gcc_cpp ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
             - name: Run Test
               run: |
-                docker container exec -it clang_cpp  sh -c "cd tests && ./exec"
+                  docker exec gcc_cpp sh -c "cd tests && ./exec"
             - name : Login to docker
               run:  docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
             - name: Cleanup
