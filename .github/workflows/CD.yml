@@ -5,7 +5,7 @@ on:
     types:
       - in_progress
     branches: 
-      - "**"
+      - CD_branch
 jobs:
   build_clang:
     runs-on: ubuntu-latest
@@ -17,10 +17,10 @@ jobs:
       - name: Pull && Build Docker Image
         run: |
           docker pull ${{ secrets.USERNAME }}/clang_cpp:$TAG
-          docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}} .
+          docker build -f dockerfiles/clang.Dockerfile -t ${{ secrets.USERNAME }}/clang_cpp:$TAG .
       - name: Save Docker Image
         run: |
-          docker save ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}  -o clang_cpp.tar
+          docker save ${{ secrets.USERNAME }}/clang_cpp:$TAG  -o clang_cpp.tar
       - name: Upload Docker Image
         uses: actions/upload-artifact@v2
         with:
