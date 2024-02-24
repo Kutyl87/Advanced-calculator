@@ -1,6 +1,6 @@
 name: C++ CD
 on:
-    push:
+  push:
       branches:
         - '*'
   workflow_run:
