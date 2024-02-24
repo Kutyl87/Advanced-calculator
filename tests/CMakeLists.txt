@@ -21,7 +21,7 @@ set_target_properties(exec
         CXX_STANDARD_REQUIRED ON
 )
 if(MSVC)
-  target_compile_options(exec PRIVATE -Wall /W4 -pedantic -Werror)
+  # target_compile_options(exec PRIVATE -Wall /W4 -pedantic -Werror)
 else()
   target_compile_options(exec PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()

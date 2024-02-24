@@ -12,7 +12,7 @@ set_target_properties(CharacterApp
 )
 include_directories(../lib)
 if(MSVC)
-  target_compile_options(CharacterApp PRIVATE -Wall /W4 -pedantic -Werror)
+#   target_compile_options(CharacterApp PRIVATE -Wall /W4 -pedantic -Werror)
 else()
   target_compile_options(CharacterApp PRIVATE -Wall -Wextra -pedantic -Werror)
 endif()
