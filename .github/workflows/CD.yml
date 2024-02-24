@@ -1,7 +1,7 @@
 name: C++ CD
 on:
   workflow_run:
-    workflows: [C++ CI Linux]
+    workflows: [C\\+\\+ CI Linux]
     types:
       - in_progress
     branches: [CD_branch]
