@@ -21,3 +21,4 @@ jobs:
                     cd tests
                     dir
                     cd exec.dir
+                    dir
