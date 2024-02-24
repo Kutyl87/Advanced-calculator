@@ -18,6 +18,10 @@ on:
         branch:
             description: 'Branch to deploy (main or develop)'
             required: true
+            type: choice
+            options:
+            - main
+            - develop
             default: 'develop'
 
 jobs:
