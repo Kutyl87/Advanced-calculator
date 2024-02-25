@@ -105,7 +105,7 @@ jobs:
                 docker run -d -it --name gcc_cpp ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
           - name: Run Acceptance Test
             run: |
-              docker exec gcc_cpp sh -c "diff ../../tests/01-output.txt <(./CharacterApp < ../../tests/01-input.txt)"
+              docker exec gcc_cpp sh -c "cd app && diff ../../tests/01-output.txt <(./CharacterApp < ../../tests/01-input.txt)"
 
     acceptance-test-clang:
       needs: build-clang-image
@@ -119,4 +119,4 @@ jobs:
                 docker run -d -it --name clang_cpp ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
           - name: Run Acceptance Test
             run: |
-              docker exec clang_cpp sh -c "diff ../../tests/01-output.txt <(./CharacterApp < ../../tests/01-input.txt)"
+              docker exec clang_cpp sh -c "cd app && diff ../../tests/01-output.txt <(./CharacterApp < ../../tests/01-input.txt)"
