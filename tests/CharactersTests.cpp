@@ -36,3 +36,38 @@ TEST_CASE("Characters counts letters", "[characters]") {
   a.collect('e');
   REQUIRE(a.letterFrequency() == Catch::Approx(1));
 }
+
+TEST_CASE("Characters counts letters and non-letters", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('a');
+  a.collect('b');
+  a.collect('c');
+  a.collect('d');
+  a.collect('e');
+  a.collect('1');
+  a.collect('2');
+  a.collect('3');
+  a.collect('4');
+  a.collect('5');
+  REQUIRE(a.letterFrequency() == Catch::Approx(0.5));
+}
+
+TEST_CASE("Count only numbers", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('1');
+  a.collect('2');
+  a.collect('3');
+  a.collect('4');
+  a.collect('5');
+  REQUIRE(a.count() == 5);
+}
+
+TEST_CASE("Count only letters", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('a');
+  a.collect('b');
+  a.collect('c');
+  a.collect('d');
+  a.collect('e');
+  REQUIRE(a.count() == 5);
+}
