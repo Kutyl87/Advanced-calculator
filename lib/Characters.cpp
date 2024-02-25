@@ -41,6 +41,7 @@ void Characters::checkIfEmpty() const {
     throw std::invalid_argument("Vector is empty");
   }
 }
+
 double Characters::getLowestFrequency(
     const std::vector<char>& searchData) const {
   checkIfEmpty();
@@ -53,18 +54,41 @@ double Characters::getLowestFrequency(
   return min_frequency;
 }
 
+double Characters::getHighestFrequency(
+    const std::vector<char>& searchData) const {
+  checkIfEmpty();
+  double max_frequency = 0;
+  for (auto letter : searchData) {
+    if (frequencyCertainLetter(letter) > max_frequency) {
+      max_frequency = frequencyCertainLetter(letter);
+    }
+  }
+  return max_frequency;
+}
 std::vector<char> Characters::getLeastFrequentLetter() const {
+  double min_frequency = getLowestFrequency(getLetters());
+  std::vector<char> least_frequent_letters =
+      getLetterWithFrequency(min_frequency);
+  return least_frequent_letters;
+}
+
+std::vector<char> Characters::getMostFrequentLetter() const {
+  double max_frequency = getHighestFrequency(getLetters());
+  std::vector<char> most_frequent_letters =
+      getLetterWithFrequency(max_frequency);
+  return most_frequent_letters;
+}
+
+std::vector<char> Characters::getLetterWithFrequency(double frequency) const {
   checkIfEmpty();
   std::vector<char> data_letters = getLetters();
   char least_frequent_letter = data_letters[0];
-  double min_frequency = getLowestFrequency(data_letters);
   std::unordered_set<char> unique_data_set(data_letters.begin(),
                                            data_letters.end());
   std::vector<char> unique_data(unique_data_set.begin(), unique_data_set.end());
-  std::vector<char> least_frequent_letters;
+  std::vector<char> letters;
   for (auto letter : unique_data) {
-    if (frequencyCertainLetter(letter) == min_frequency)
-      least_frequent_letters.push_back(letter);
+    if (frequencyCertainLetter(letter) == frequency) letters.push_back(letter);
   }
-  return least_frequent_letters;
+  return letters;
 }

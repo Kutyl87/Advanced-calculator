@@ -15,7 +15,10 @@ class Characters {
   void checkIfLetterIsAlpha() const;
   std::vector<char> getLetters() const;
   double getLowestFrequency(const std::vector<char>& searchData) const;
+  double getHighestFrequency(const std::vector<char>& searchData) const;
   std::vector<char> getLeastFrequentLetter() const;
+  std::vector<char> getMostFrequentLetter() const;
+  std::vector<char> getLetterWithFrequency(double frequency) const;
 
  private:
   std::vector<char> data;

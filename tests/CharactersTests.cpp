@@ -174,7 +174,7 @@ TEST_CASE("Get only letters empty", "[characters]") {
   REQUIRE(a.getLetters() == letters);
 }
 
-TEST_CASE("Get least frequent letter", "[characters]") {
+TEST_CASE("Get least frequent letter draw", "[characters]") {
   swo::chars::Characters a;
   a.collect('a');
   a.collect('b');
@@ -193,8 +193,56 @@ TEST_CASE("Get least frequent letter", "[characters]") {
   REQUIRE(expected_results == actual_results);
 }
 
+TEST_CASE("GEt least frequent letter single", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('a');
+  a.collect('a');
+  a.collect('a');
+  a.collect('b');
+  std::vector<char> expected_results = {'b'};
+  std::vector<char> actual_results = a.getLeastFrequentLetter();
+  std::sort(expected_results.begin(), expected_results.end());
+  std::sort(actual_results.begin(), actual_results.end());
+  REQUIRE(expected_results == actual_results);
+}
 TEST_CASE("Get least frequent letter empty", "[characters]") {
   swo::chars::Characters a;
   std::vector<char> letters;
   REQUIRE_THROWS_AS(a.getLeastFrequentLetter(), std::invalid_argument);
+}
+TEST_CASE("Get most frequent letter empty", "[characters]") {
+  swo::chars::Characters a;
+  std::vector<char> letters;
+  REQUIRE_THROWS_AS(a.getMostFrequentLetter(), std::invalid_argument);
+}
+TEST_CASE("Get most frequent letter draw ", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('a');
+  a.collect('b');
+  a.collect('c');
+  a.collect('d');
+  a.collect('e');
+  a.collect('1');
+  a.collect('2');
+  a.collect('3');
+  a.collect('4');
+  a.collect('5');
+  std::vector<char> expected_results = {'a', 'b', 'c', 'd', 'e'};
+  std::vector<char> actual_results = a.getMostFrequentLetter();
+  std::sort(expected_results.begin(), expected_results.end());
+  std::sort(actual_results.begin(), actual_results.end());
+  REQUIRE(expected_results == actual_results);
+}
+
+TEST_CASE("Get most frequent letter single", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('a');
+  a.collect('a');
+  a.collect('a');
+  a.collect('b');
+  std::vector<char> expected_results = {'a'};
+  std::vector<char> actual_results = a.getMostFrequentLetter();
+  std::sort(expected_results.begin(), expected_results.end());
+  std::sort(actual_results.begin(), actual_results.end());
+  REQUIRE(expected_results == actual_results);
 }
