@@ -9,10 +9,14 @@ class Characters {
 
   std::size_t count() const { return data.size(); }
   double letterFrequency() const;
+  double frequencyCertainLetter(const char& letter) const;
+  void checkIfEmpty() const;
+  double getLowestFrequency() const;
+  char getLeastFrequentLetter() const;
 
  private:
   std::vector<char> data;
 };
 
-}  // namespace swo::chars
-}
+}  // namespace chars
+}  // namespace swo
