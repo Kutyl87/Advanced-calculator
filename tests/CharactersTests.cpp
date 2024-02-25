@@ -119,6 +119,10 @@ TEST_CASE("Frequency equal to zero", "[characters]") {
   a.collect('5');
   REQUIRE(a.frequencyCertainLetter('a') == Catch::Approx(0));
 }
+TEST_CASE("Letter is not alpha", "[characters]") {
+  swo::chars::Characters a;
+  REQUIRE_THROWS_AS(a.frequencyCertainLetter('1'), std::invalid_argument);
+}
 TEST_CASE("Minimum frequency equal to one", "[characters]") {
   swo::chars::Characters a;
   a.collect('a');
@@ -144,4 +148,20 @@ TEST_CASE("Vector Empty message", "[characters]") {
   } catch (std::invalid_argument& e) {
     REQUIRE(e.what() == std::string("Vector is empty"));
   }
+}
+
+TEST_CASE("Get only letters", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('a');
+  a.collect('b');
+  a.collect('c');
+  a.collect('d');
+  a.collect('e');
+  a.collect('1');
+  a.collect('2');
+  a.collect('3');
+  a.collect('4');
+  a.collect('5');
+  std::vector<char> letters = {'a', 'b', 'c', 'd', 'e'};
+  REQUIRE(a.getLetters() == letters);
 }

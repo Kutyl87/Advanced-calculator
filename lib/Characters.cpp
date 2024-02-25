@@ -4,10 +4,20 @@
 #include <cctype>
 #include <iostream>
 #include <numeric>
+#include <unordered_set>
 using namespace swo::chars;
 
 void Characters::collect(char input) { data.push_back(input); }
 
+std::vector<char> Characters::getLetters() const {
+  std::vector<char> letters;
+  for (auto letter : data) {
+    if (std::isalpha(letter)) {
+      letters.push_back(letter);
+    }
+  }
+  return letters;
+}
 double Characters::letterFrequency() const {
   const auto letters =
       std::count_if(std::begin(data), std::end(data),
@@ -16,6 +26,9 @@ double Characters::letterFrequency() const {
 }
 
 double Characters::frequencyCertainLetter(const char& letter) const {
+  if (!std::isalpha(letter)) {
+    throw std::invalid_argument("Not a letter");
+  }
   const auto letters = std::count_if(
       std::begin(data), std::end(data), [letter](unsigned char ch) {
         return std::tolower(ch) == std::tolower(letter);
@@ -37,4 +50,18 @@ double Characters::getLowestFrequency() const {
     }
   }
   return min_frequency;
+}
+
+std::vector<char> Characters::getLeastFrequentLetter() const {
+  checkIfEmpty();
+  char least_frequent_letter = data[0];
+  double min_frequency = getLowestFrequency();
+  std::unordered_set<char> unique_data_set(data.begin(), data.end());
+  std::vector<char> unique_data(unique_data_set.begin(), unique_data_set.end());
+  std::vector<char> least_frequent_letters;
+  for (auto letter : data) {
+    if (frequencyCertainLetter(letter) == min_frequency)
+      least_frequent_letters.push_back(letter);
+  }
+  return least_frequent_letters;
 }

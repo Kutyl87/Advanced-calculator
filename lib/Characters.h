@@ -11,8 +11,10 @@ class Characters {
   double letterFrequency() const;
   double frequencyCertainLetter(const char& letter) const;
   void checkIfEmpty() const;
+  void checkIfLetterIsAlpha() const;
+  std::vector<char> getLetters() const;
   double getLowestFrequency() const;
-  char getLeastFrequentLetter() const;
+  std::vector<char> getLeastFrequentLetter() const;
 
  private:
   std::vector<char> data;
