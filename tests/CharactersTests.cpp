@@ -126,14 +126,16 @@ TEST_CASE("Letter is not alpha", "[characters]") {
 TEST_CASE("Minimum frequency equal to one", "[characters]") {
   swo::chars::Characters a;
   a.collect('a');
-  REQUIRE(a.getLowestFrequency() == Catch::Approx(1));
+  std::vector<char> data = a.getData();
+  REQUIRE(a.getLowestFrequency(data) == Catch::Approx(1));
 }
 
 TEST_CASE("Minimum frequency draw", "[characters]") {
   swo::chars::Characters a;
   a.collect('a');
   a.collect('b');
-  REQUIRE(a.getLowestFrequency() == Catch::Approx(0.5));
+  std::vector<char> data = a.getData();
+  REQUIRE(a.getLowestFrequency(data) == Catch::Approx(0.5));
 }
 
 TEST_CASE("Vector Empty", "[characters]") {
@@ -164,4 +166,35 @@ TEST_CASE("Get only letters", "[characters]") {
   a.collect('5');
   std::vector<char> letters = {'a', 'b', 'c', 'd', 'e'};
   REQUIRE(a.getLetters() == letters);
+}
+
+TEST_CASE("Get only letters empty", "[characters]") {
+  swo::chars::Characters a;
+  std::vector<char> letters;
+  REQUIRE(a.getLetters() == letters);
+}
+
+TEST_CASE("Get least frequent letter", "[characters]") {
+  swo::chars::Characters a;
+  a.collect('a');
+  a.collect('b');
+  a.collect('c');
+  a.collect('d');
+  a.collect('e');
+  a.collect('1');
+  a.collect('2');
+  a.collect('3');
+  a.collect('4');
+  a.collect('5');
+  std::vector<char> expected_results = {'a', 'b', 'c', 'd', 'e'};
+  std::vector<char> actual_results = a.getLeastFrequentLetter();
+  std::sort(expected_results.begin(), expected_results.end());
+  std::sort(actual_results.begin(), actual_results.end());
+  REQUIRE(expected_results == actual_results);
+}
+
+TEST_CASE("Get least frequent letter empty", "[characters]") {
+  swo::chars::Characters a;
+  std::vector<char> letters;
+  REQUIRE_THROWS_AS(a.getLeastFrequentLetter(), std::invalid_argument);
 }
