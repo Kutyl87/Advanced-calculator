@@ -67,13 +67,6 @@ jobs:
                   docker exec gcc_cpp sh -c "cd tests && ./exec"
             - name : Login to docker
               run:  docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
-            - name: Cleanup
-              if: always()
-              run: |
-                   TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${{ secrets.USERNAME}}'", "password": "'${{ secrets.PASSWORD}}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
-                   echo $TOKEN
-                   echo https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/my-docker-image/tags/${{ github.run_id }}
-                   curl -i -X DELETE -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/gcc_cpp/tags/${{ github.run_id }} |(! grep "err")
     test-clang:
         needs: build-clang-image
         runs-on: ubuntu-latest
@@ -87,12 +80,6 @@ jobs:
             - name: Run Test
               run: |
                 docker container exec clang_cpp  sh -c "cd tests && ./exec"
-            - name: Cleanup
-              if: always()
-              run: |
-                   TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${{ secrets.USERNAME}}'", "password": "'${{ secrets.PASSWORD}}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
-                   echo $TOKEN
-                   curl -i -X DELETE -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/clang_cpp/tags/${{ github.run_id }} |(! grep "err")
     acceptance-test-gcc:
       needs: build-gcc-image
       runs-on: ubuntu-latest
@@ -120,3 +107,16 @@ jobs:
           - name: Run Acceptance Test
             run: |
               docker exec clang_cpp sh -c "cd app && diff ../../tests/01-output.txt <(./CharacterApp < ../../tests/01-input.txt)"
+
+    cleanup:
+      needs: [test-gcc, test-clang, acceptance-test-gcc, acceptance-test-clang]
+      runs-on: ubuntu-latest
+      steps:
+        - name: Login to docker
+          run:  docker login -u ${{ secrets.USERNAME }} -p ${{ secrets.PASSWORD }}
+        - name: Cleanup
+          run: |
+               TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${{ secrets.USERNAME}}'", "password": "'${{ secrets.PASSWORD}}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+               echo $TOKEN
+               curl -i -X DELETE -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/clang_cpp/tags/${{ github.run_id }} |(! grep "err")
+               curl -i -X DELETE -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/gcc_cpp/tags/${{ github.run_id }} |(! grep "err")
