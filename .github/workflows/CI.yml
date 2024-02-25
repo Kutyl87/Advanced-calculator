@@ -93,3 +93,30 @@ jobs:
                    TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${{ secrets.USERNAME}}'", "password": "'${{ secrets.PASSWORD}}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
                    echo $TOKEN
                    curl -i -X DELETE -H "Authorization: JWT ${TOKEN}" https://hub.docker.com/v2/repositories/${{ secrets.USERNAME }}/clang_cpp/tags/${{ github.run_id }} |(! grep "err")
+    acceptance-test-gcc:
+      needs: build-gcc-image
+      runs-on: ubuntu-latest
+      steps:
+          - name: Pull image
+            run: |
+              docker pull ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
+          - name: Run Container
+            run: |
+                docker run -d -it --name gcc_cpp ${{ secrets.USERNAME }}/gcc_cpp:${{ github.run_id}}
+          - name: Run Acceptance Test
+            run: |
+              docker exec gcc_cpp sh -c "diff ../../tests/01-output.txt <(./CharacterApp < ../../tests/01-input.txt)"
+
+    acceptance-test-clang:
+      needs: build-clang-image
+      runs-on: ubuntu-latest
+      steps:
+          - name: Pull image
+            run: |
+              docker pull ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
+          - name: Run Container
+            run: |
+                docker run -d -it --name clang_cpp ${{ secrets.USERNAME }}/clang_cpp:${{ github.run_id}}
+          - name: Run Acceptance Test
+            run: |
+              docker exec clang_cpp sh -c "diff ../../tests/01-output.txt <(./CharacterApp < ../../tests/01-input.txt)"
