@@ -6,10 +6,11 @@
 int main() {
   swo::chars::Characters a;
 
+  char x;
+  std::cin >> x;
   while (std::cin) {
-    char x = 0;
-    std::cin >> x;
     a.collect(x);
+    std::cin >> x;
   }
 
   std::cout << "Count: " << a.count() << '\n';
