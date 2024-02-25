@@ -1,0 +1,2 @@
+Count: 110
+Letter frequency: 16%
